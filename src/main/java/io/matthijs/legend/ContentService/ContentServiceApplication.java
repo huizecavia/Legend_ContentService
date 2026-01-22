@@ -1,4 +1,4 @@
-package io.matthijs.service.ContentService;
+package io.matthijs.legend.ContentService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

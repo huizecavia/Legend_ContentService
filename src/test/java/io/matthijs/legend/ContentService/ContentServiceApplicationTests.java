@@ -1,4 +1,4 @@
-package io.matthijs.service.ContentService;
+package io.matthijs.legend.ContentService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

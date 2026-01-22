@@ -1,2 +1,0 @@
-# Legend_ContentService
-Legend_ContentService
