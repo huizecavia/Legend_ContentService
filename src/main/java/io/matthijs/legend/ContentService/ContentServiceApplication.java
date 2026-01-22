@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import io.matthijs.Item;
+
 @RestController
 @SpringBootApplication
 public class ContentServiceApplication {
@@ -29,7 +31,11 @@ public class ContentServiceApplication {
 	@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
 				Pagemodel p = restTemplate(new RestTemplateBuilder()).getForObject("https://cdn.contentful.com/spaces/gvfxre3jlkjm/entries?access_token=_39Gt27-U1xYE9IUJDDlsj2Lv9A2R9PrrjZsK4AV9T4", Pagemodel.class);
-		return String.format("Hello %s!", p.toString());
+				var a = p.items().get(0);
+				// var b = (Item) a;
+
+
+		return String.format("Hello %s!", a.toString());
 	}
 
 }
