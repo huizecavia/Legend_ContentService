@@ -2,22 +2,29 @@ package io.matthijs.legend.ContentService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import io.matthijs.Item;
-
 @RestController
 @SpringBootApplication
 public class ContentServiceApplication {
 
-	private static final Logger log = LoggerFactory.getLogger(ContentServiceApplication.class);
+	private final RedisTemplate<String, String> redisTemplate;
+
+	@Autowired
+	public ContentServiceApplication(RedisTemplate<String, String> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ContentServiceApplication.class, args);
@@ -34,9 +41,25 @@ public class ContentServiceApplication {
 				var a = p.items().get(0);
 				var b = a.fields();
 				var c = b.beschrijving();
-
-
 		return String.format("Hello %s!", c.toString());
 	}
+
+
+	@GetMapping("/put")
+	public String put(@RequestParam(value = "name", defaultValue = "World") String name) {
+
+		String key = "sleutel";
+		String value = name;
+		redisTemplate.opsForValue().set(key, value);
+
+
+		return redisTemplate.opsForValue().get(key);
+	}
+
+
+
+
+
+//	https://dev.to/ayshriv/spring-boot-redis-a-beginner-friendly-guide-to-supercharging-your-apps-performance-52l9
 
 }
