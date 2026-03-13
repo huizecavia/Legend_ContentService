@@ -52,14 +52,14 @@ public class ContentServiceApplication {
 		String value = name;
 		redisTemplate.opsForValue().set(key, value);
 
+		return "maybe";
+	}
 
+	@GetMapping("/get")
+	public String get() {
+		String key = "sleutel";
 		return redisTemplate.opsForValue().get(key);
 	}
 
-
-
-
-
-//	https://dev.to/ayshriv/spring-boot-redis-a-beginner-friendly-guide-to-supercharging-your-apps-performance-52l9
 
 }
