@@ -6,6 +6,9 @@ import com.contentful.java.cda.CDAClient;
 import com.contentful.java.cda.CDAEntry;
 import com.contentful.java.cda.rich.CDARichDocument;
 
+import io.matthijs.legend.ContentService.Model.Hike;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +29,7 @@ public class ContentfulAssetService {
         return "https:" + asset.url();
     }
 
-    public String getEntry() {
-
-        CDAArray entries = client.fetch(CDAEntry.class).all();
-        String q = entries.toString();
+    public Hike getEntry() {
 
         List<CDAEntry> fetchHikes = client.fetch(CDAEntry.class)
             .where("content_type", "hike")
@@ -40,14 +40,19 @@ public class ContentfulAssetService {
             .toList();
 
         CDAEntry e = fetchHikes.get(0);
-        String titel = e.getField("titel");
         List<CDAAsset> routes = e.getField("route");
-        CDAAsset route = routes.get(0);
-        CDARichDocument beschrijving = e.getField("beschrijving");
-        String datumuitvoering = e.getField("datumuitvoering");
         List<CDAAsset> pictures = e.getField("pictures");
+        List<String> pictureUrls = new ArrayList<>();
+        pictureUrls.add(pictures.get(0).url());
+        pictureUrls.add(pictures.get(1).url());
 
-        return "Got it";
+        Hike h = new Hike(e.getField("titel"), 
+            routes.get(0).url(), 
+            e.getField("beschrijving"), 
+            e.getField("datumuitvoering"), 
+            pictureUrls);
+
+        return h;
     }
 }
 

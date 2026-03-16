@@ -7,7 +7,6 @@ import org.springframework.web.client.RestTemplate;
 
 
 
-import io.matthijs.legend.ContentService.Model.AssetModel;
 import io.matthijs.legend.ContentService.Model.Pagemodel;
 
 @Service
@@ -16,8 +15,6 @@ public class ContentService {
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }
-
-
 
     @Cacheable(value = "justCache")
     public String getCacheContent() {

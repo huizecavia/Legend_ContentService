@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import io.matthijs.legend.ContentService.Model.Hike;
 import io.matthijs.legend.ContentService.Model.Pagemodel;
 import io.matthijs.legend.cdaclient.ContentfulAssetService;
 
@@ -79,9 +80,9 @@ public class ContentServiceApplication {
 	}
 
 		@GetMapping("/entry")
-		public String getEntry() {
-		String s = contentfulAssetService.getEntry();
-		return "Nee";
+		public Hike getEntry() {
+		Hike h = contentfulAssetService.getEntry();
+		return h;
 	}
 		@GetMapping("/cda")
 		public String cda() {
