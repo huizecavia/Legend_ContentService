@@ -1,4 +1,4 @@
-package io.matthijs.legend.ContentService;
+package io.matthijs.legend.ContentService.Model;
 import java.util.List;
 
 public record Hike(

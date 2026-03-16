@@ -12,19 +12,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import io.matthijs.legend.ContentService.Model.Pagemodel;
+import io.matthijs.legend.cdaclient.ContentfulAssetService;
+
 @RestController
 @EnableCaching
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "io.matthijs.legend")
 public class ContentServiceApplication {
 
 	private final RedisTemplate<String, String> redisTemplate;
-
 	private final ContentService contentService;
+	private final ContentfulAssetService contentfulAssetService;
 
 	@Autowired
-	public ContentServiceApplication(RedisTemplate<String, String> redisTemplate, ContentService contentService) {
+	public ContentServiceApplication(RedisTemplate<String, String> redisTemplate, ContentService contentService, ContentfulAssetService contentfulAssetService) {
 		this.redisTemplate = redisTemplate;
         this.contentService = contentService;
+		this.contentfulAssetService = contentfulAssetService;
     }
 
 	public static void main(String[] args) {
@@ -74,5 +78,15 @@ public class ContentServiceApplication {
 		return "Nee";
 	}
 
+		@GetMapping("/asset")
+		public String asset() {
+		String s = contentService.getAsset();
+		return "Nee";
+	}
+		@GetMapping("/cda")
+		public String cda() {
+		var a = contentfulAssetService.getAssetUrl("4LuuEqJQIac35xejWg54Om");
+		return a;
+	}
 
 }

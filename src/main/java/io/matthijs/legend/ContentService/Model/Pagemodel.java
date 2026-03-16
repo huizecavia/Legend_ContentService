@@ -1,8 +1,6 @@
-package io.matthijs.legend.ContentService;
+package io.matthijs.legend.ContentService.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import io.matthijs.Item;
 
 import java.util.List;
 
