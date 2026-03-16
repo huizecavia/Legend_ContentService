@@ -4,6 +4,7 @@ import com.contentful.java.cda.CDAArray;
 import com.contentful.java.cda.CDAAsset;
 import com.contentful.java.cda.CDAClient;
 import com.contentful.java.cda.CDAEntry;
+import com.contentful.java.cda.rich.CDARichDocument;
 
 import java.util.List;
 
@@ -39,8 +40,13 @@ public class ContentfulAssetService {
             .toList();
 
         CDAEntry e = fetchHikes.get(0);
-        String title = e.getField("titel");
-        
+        String titel = e.getField("titel");
+        List<CDAAsset> routes = e.getField("route");
+        CDAAsset route = routes.get(0);
+        CDARichDocument beschrijving = e.getField("beschrijving");
+        String datumuitvoering = e.getField("datumuitvoering");
+        List<CDAAsset> pictures = e.getField("pictures");
+
         return "Got it";
     }
 }
