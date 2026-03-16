@@ -55,18 +55,3 @@ public class ContentfulAssetService {
         return h;
     }
 }
-
-// // Fetch one asset by ID
-// CDAAsset asset = client.fetch(CDAAsset.class).one("your-asset-id");
-
-// // Fetch one entry by ID
-// CDAEntry entry = client.fetch(CDAEntry.class).one("your-entry-id");
-
-// // Query multiple entries (all)
-// CDAArray entries = client.fetch(CDAEntry.class).all();
-
-// // Query entries by content type
-// CDAArray hikes = client.fetch(CDAEntry.class)
-//     .where("content_type", "hike")
-//     .all();
-
