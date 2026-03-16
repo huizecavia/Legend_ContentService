@@ -78,9 +78,9 @@ public class ContentServiceApplication {
 		return "Nee";
 	}
 
-		@GetMapping("/asset")
-		public String asset() {
-		String s = contentService.getAsset();
+		@GetMapping("/entry")
+		public String getEntry() {
+		String s = contentfulAssetService.getEntry();
 		return "Nee";
 	}
 		@GetMapping("/cda")

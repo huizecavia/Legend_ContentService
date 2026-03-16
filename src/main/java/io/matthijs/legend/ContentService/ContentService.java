@@ -28,13 +28,6 @@ public class ContentService {
         return String.format("Hello %s!", c.toString());
     }
 
-    public String getAsset() {
-        
-        AssetModel a = restTemplate(new RestTemplateBuilder()).getForObject("https://cdn.contentful.com/spaces/gvfxre3jlkjm/assets/5XBKPhi2aFxVLizTVn8c9L?access_token=_39Gt27-U1xYE9IUJDDlsj2Lv9A2R9PrrjZsK4AV9T4", AssetModel.class);
-        String b = a.toString();
-        return "Huh?";
-    }
-
     public String mapContent() {
 			Pagemodel p = restTemplate(new RestTemplateBuilder()).getForObject("https://cdn.contentful.com/spaces/gvfxre3jlkjm/entries?access_token=_39Gt27-U1xYE9IUJDDlsj2Lv9A2R9PrrjZsK4AV9T4", Pagemodel.class);
             var a = p.items().get(0).fields();
