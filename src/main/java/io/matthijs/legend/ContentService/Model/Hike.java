@@ -6,7 +6,7 @@ import com.contentful.java.cda.rich.CDARichDocument;
 public record Hike(
         String titel,
         String route,
-        CDARichDocument beschrijving,
+        String beschrijving,
         String datumuitvoering,
         List<String> pictures
 ) {

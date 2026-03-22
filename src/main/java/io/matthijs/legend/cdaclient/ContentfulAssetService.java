@@ -48,16 +48,22 @@ public class ContentfulAssetService {
         pictureUrls.add(pictures.get(0).url());
         pictureUrls.add(pictures.get(1).url());
 
-        CDARichDocument a = e.getField("beschrijving");
-        List<CDARichNode> b = a.getContent();
-        CDARichNode c = b.get(0);
-        List<CDARichNode> d = ((CDARichBlock) c).getContent(); 
-        CDARichNode f = d.get(0);
-        String text = ((CDARichText) f).getText().toString();
+        // beschrijving
+        StringBuilder beschrijving = new StringBuilder();
+
+        CDARichDocument doc = e.getField("beschrijving");
+        List<CDARichNode> b = doc.getContent();
+
+        for (CDARichNode node1: doc.getContent()) {
+            for (CDARichNode node2: ((CDARichBlock) node1).getContent()) {
+                String text = ((CDARichText) node2).getText().toString();
+                beschrijving.append(text);
+            }
+        }
 
         Hike h = new Hike(e.getField("titel"), 
             routes.get(0).url(), 
-            e.getField("beschrijving"), 
+            beschrijving.toString(), 
             e.getField("datumuitvoering"), 
             pictureUrls);
 
