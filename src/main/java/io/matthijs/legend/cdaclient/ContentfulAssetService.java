@@ -1,10 +1,12 @@
 package io.matthijs.legend.cdaclient;
 
-import com.contentful.java.cda.CDAArray;
+import com.contentful.java.cda.rich.CDARichText;
 import com.contentful.java.cda.CDAAsset;
 import com.contentful.java.cda.CDAClient;
 import com.contentful.java.cda.CDAEntry;
+import com.contentful.java.cda.rich.CDARichBlock;
 import com.contentful.java.cda.rich.CDARichDocument;
+import com.contentful.java.cda.rich.CDARichNode;
 
 import io.matthijs.legend.ContentService.Model.Hike;
 
@@ -45,6 +47,13 @@ public class ContentfulAssetService {
         List<String> pictureUrls = new ArrayList<>();
         pictureUrls.add(pictures.get(0).url());
         pictureUrls.add(pictures.get(1).url());
+
+        CDARichDocument a = e.getField("beschrijving");
+        List<CDARichNode> b = a.getContent();
+        CDARichNode c = b.get(0);
+        List<CDARichNode> d = ((CDARichBlock) c).getContent(); 
+        CDARichNode f = d.get(0);
+        String text = ((CDARichText) f).getText().toString();
 
         Hike h = new Hike(e.getField("titel"), 
             routes.get(0).url(), 
