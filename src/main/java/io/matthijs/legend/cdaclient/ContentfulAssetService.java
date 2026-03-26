@@ -7,6 +7,8 @@ import com.contentful.java.cda.CDAEntry;
 import com.contentful.java.cda.rich.CDARichBlock;
 import com.contentful.java.cda.rich.CDARichDocument;
 import com.contentful.java.cda.rich.CDARichNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.matthijs.legend.ContentService.Model.Hike;
 
@@ -14,16 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContentfulAssetService {
 
     private final CDAClient client;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ContentfulAssetService(CDAClient client) {
+    public ContentfulAssetService(CDAClient client, RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
         this.client = client;
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
     }
 
     public String getAssetUrl(String assetId) {
@@ -31,7 +38,7 @@ public class ContentfulAssetService {
         return "https:" + asset.url();
     }
 
-    public Hike getEntry() {
+    public Hike getEntry() throws JsonProcessingException {
 
         List<CDAEntry> fetchHikes = client.fetch(CDAEntry.class)
             .where("content_type", "hike")
@@ -40,6 +47,7 @@ public class ContentfulAssetService {
             .values()
             .stream()
             .toList();
+
 
         CDAEntry e = fetchHikes.get(0);
         List<CDAAsset> routes = e.getField("route");
@@ -66,6 +74,12 @@ public class ContentfulAssetService {
             beschrijving.toString(), 
             e.getField("datumuitvoering"), 
             pictureUrls);
+
+            
+        String json = objectMapper.writeValueAsString(h);
+        redisTemplate.opsForList().leftPush("hikes_list", json);       
+
+        
 
         return h;
     }

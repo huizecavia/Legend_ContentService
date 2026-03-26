@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.matthijs.legend.ContentService.Model.Hike;
 import io.matthijs.legend.cdaclient.ContentfulAssetService;
 
@@ -40,7 +42,7 @@ public class ContentServiceApplication {
 	}
 
 		@GetMapping("/hike")
-		public Hike getEntry() {
+		public Hike getEntry() throws JsonProcessingException {
 		Hike h = contentfulAssetService.getEntry();
 		return h;
 	}
