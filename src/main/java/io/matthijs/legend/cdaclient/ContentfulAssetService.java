@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,9 @@ public class ContentfulAssetService {
         return "https:" + asset.url();
     }
 
-    public Hike getEntry() throws JsonProcessingException {
+    public List<Hike> getHikes() throws JsonProcessingException {
+
+        List<Hike> hikes = new ArrayList<>();
 
         List<CDAEntry> fetchHikes = client.fetch(CDAEntry.class)
             .where("content_type", "hike")
@@ -48,39 +51,52 @@ public class ContentfulAssetService {
             .stream()
             .toList();
 
+        for (CDAEntry e : fetchHikes) {
 
-        CDAEntry e = fetchHikes.get(0);
-        List<CDAAsset> routes = e.getField("route");
-        List<CDAAsset> pictures = e.getField("pictures");
-        List<String> pictureUrls = new ArrayList<>();
-        pictureUrls.add(pictures.get(0).url());
-        pictureUrls.add(pictures.get(1).url());
+            List<CDAAsset> routes = e.getField("route");
+            List<String> routeUrls = new ArrayList<>();
 
-        // beschrijving
-        StringBuilder beschrijving = new StringBuilder();
-
-        CDARichDocument doc = e.getField("beschrijving");
-        List<CDARichNode> b = doc.getContent();
-
-        for (CDARichNode node1: doc.getContent()) {
-            for (CDARichNode node2: ((CDARichBlock) node1).getContent()) {
-                String text = ((CDARichText) node2).getText().toString();
-                beschrijving.append(text);
+            for (CDAAsset route : routes) {
+                if (route != null) {
+                    routeUrls.add(route.url());
+                }
             }
+            
+            List<String> pictureUrls = new ArrayList<>();
+            List<CDAAsset> pictures = e.getField("pictures");            
+
+            if (pictures != null) {
+                for (CDAAsset picture : pictures) {
+                    pictureUrls.add(picture.url());
+                }
+            }
+
+            StringBuilder beschrijving = new StringBuilder();
+            CDARichDocument doc = e.getField("beschrijving");
+    
+            if (doc != null && doc.getContent() != null) {
+                for (CDARichNode node1: doc.getContent()) {
+                    if (node1 instanceof CDARichBlock block) {
+                        for (CDARichNode node2: block.getContent()) {
+                            if (node2 instanceof CDARichText richText) {
+                                beschrijving.append(richText.getText());
+                            }
+
+                        }            
+                    }
+                }
+            }
+
+            Hike h = new Hike(e.getField("titel"), 
+                routeUrls, 
+                beschrijving.toString(), 
+                e.getField("datumuitvoering"), 
+                pictureUrls);
+
+            hikes.add(h);
         }
 
-        Hike h = new Hike(e.getField("titel"), 
-            routes.get(0).url(), 
-            beschrijving.toString(), 
-            e.getField("datumuitvoering"), 
-            pictureUrls);
-
-            
-        String json = objectMapper.writeValueAsString(h);
-        redisTemplate.opsForList().leftPush("hikes_list", json);       
-
-        
-
-        return h;
+        return hikes;
     }
 }
+    

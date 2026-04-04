@@ -1,5 +1,7 @@
 package io.matthijs.legend.ContentService;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,9 +44,9 @@ public class ContentServiceApplication {
 	}
 
 		@GetMapping("/hike")
-		public Hike getEntry() throws JsonProcessingException {
-		Hike h = contentfulAssetService.getEntry();
-		return h;
+		public List<Hike> getHikes() throws JsonProcessingException {
+		List<Hike> hikes = contentfulAssetService.getHikes();
+		return hikes;
 	}
 		@GetMapping("/asset")
 		public String getAsset() {
