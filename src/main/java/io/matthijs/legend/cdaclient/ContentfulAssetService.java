@@ -58,7 +58,7 @@ public class ContentfulAssetService {
 
             for (CDAAsset route : routes) {
                 if (route != null) {
-                    routeUrls.add(route.url());
+                    routeUrls.add("https:" + route.url());
                 }
             }
             
@@ -67,7 +67,7 @@ public class ContentfulAssetService {
 
             if (pictures != null) {
                 for (CDAAsset picture : pictures) {
-                    pictureUrls.add(picture.url());
+                    pictureUrls.add("https:" + picture.url());
                 }
             }
 
